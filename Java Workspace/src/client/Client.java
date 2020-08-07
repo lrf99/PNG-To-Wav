@@ -17,6 +17,8 @@ public class Client {
 	public static int red;
 	public static int green;
 	public static int blue;
+	public static double[][] luminanceArray = new double[255][255];
+	public static double luminance;
 	
 	// Getters
 	public static BufferedImage getImage() {
@@ -24,6 +26,9 @@ public class Client {
 	}
 	public static int[] getRes() {
 		return res;
+	}
+	public static double getLuminance() {
+		return luminance;
 	}
 	
 	// Setters
@@ -40,18 +45,13 @@ public class Client {
 		res[1] = image.getHeight();
 	}
 	
-	public static void colorArray() {
-		for (int i = 0; i < 255; i++) {
-			for (int j = 0; j < 255; j++) {
-				int rgb = getImage().getRGB(i, j);
-				Color c = new Color (rgb);
-				red = c.getRed();
-				green = c.getGreen();
-				blue = c.getBlue();
-				colorArray[i][j] = c;
-			}
-		}
+	public static void setLuminance(int xPos, int yPos) { // a method to calculate the luminance of the corresponding pixel in the color array
+		int r = colorArray[xPos][yPos].getRed();
+		int g = colorArray[xPos][yPos].getGreen();
+		int b = colorArray[xPos][yPos].getBlue();
+		luminance = (0.2126*r) + (0.7152*g) + (0.0722*b);
 	}
+
 	// Constructors
 	
 	// Instance Methods 
@@ -64,8 +64,22 @@ public class Client {
 		g2d.dispose();
 		image = dimg;
 	}
+	
 	public static void printRes() { // print resolution
 		System.out.println(res[0] + "x" + res[1]);
+	}
+	
+	public static void colorArray() { // fill the color array with the RGB values of each pixel in the corresponding array location
+		for (int i = 0; i < 255; i++) {
+			for (int j = 0; j < 255; j++) {
+				int rgb = getImage().getRGB(i, j);
+				Color c = new Color (rgb);
+				red = c.getRed();
+				green = c.getGreen();
+				blue = c.getBlue();
+				colorArray[i][j] = c;
+			}
+		}
 	}
 	
 	
@@ -79,6 +93,8 @@ public class Client {
 		printRes(); // methods exist just to make sure resizing has happened
 		colorArray();
 		System.out.println(colorArray[221][241]);
+		setLuminance(221,241);
+		System.out.println(getLuminance());
 		
 	}
 
